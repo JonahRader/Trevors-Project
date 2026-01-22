@@ -59,7 +59,7 @@ export default function LoginPage() {
               />
             </svg>
           </div>
-          <span className="text-2xl font-bold text-gray-900">AdMetrics</span>
+          <span className="text-2xl font-bold text-gray-900">Lumora</span>
         </Link>
         <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
           Sign in to your account

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AdMetrics - Ad Analytics Dashboard",
+  title: "Lumora - Ad Analytics Dashboard",
   description:
     "Track and analyze your Meta and Google Ads campaigns in one place",
 };

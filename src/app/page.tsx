@@ -34,7 +34,7 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <span className="text-xl font-bold gradient-text">AdMetrics</span>
+              <span className="text-xl font-bold gradient-text">Lumora</span>
             </div>
             <div className="flex items-center gap-4">
               <Link href="/login">
@@ -112,7 +112,7 @@ export default function Home() {
               <div className="w-3 h-3 rounded-full bg-red-500" />
               <div className="w-3 h-3 rounded-full bg-yellow-500" />
               <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="ml-4 text-sm text-gray-500">dashboard.admetrics.io</span>
+              <span className="ml-4 text-sm text-gray-500">dashboard.lumora.io</span>
             </div>
             <div className="p-6 bg-gray-900/30">
               <div className="grid grid-cols-4 gap-4 mb-6">
@@ -236,7 +236,7 @@ export default function Home() {
           <div className="p-12 rounded-3xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 backdrop-blur-sm">
             <h2 className="text-4xl font-bold mb-4">Ready to optimize your ads?</h2>
             <p className="text-gray-400 mb-8">
-              Join thousands of marketers who trust AdMetrics for their ad analytics.
+              Join thousands of marketers who trust Lumora for their ad analytics.
             </p>
             <Link href="/signup">
               <Button size="lg" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 border-0 text-lg px-10 py-6">
@@ -257,9 +257,9 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
-              <span className="text-lg font-bold gradient-text">AdMetrics</span>
+              <span className="text-lg font-bold gradient-text">Lumora</span>
             </div>
-            <p className="text-sm text-gray-500">&copy; 2026 AdMetrics. All rights reserved.</p>
+            <p className="text-sm text-gray-500">&copy; 2026 Lumora. All rights reserved.</p>
           </div>
         </div>
       </footer>

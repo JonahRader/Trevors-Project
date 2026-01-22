@@ -57,7 +57,7 @@ export default function DashboardLayout({
                 />
               </svg>
             </div>
-            <span className="text-xl font-bold gradient-text">AdMetrics</span>
+            <span className="text-xl font-bold gradient-text">Lumora</span>
           </div>
 
           {/* Navigation */}
