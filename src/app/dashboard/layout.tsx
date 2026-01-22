@@ -15,6 +15,9 @@ export default function DashboardLayout({
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Check if user is admin (demo user is always admin)
+  const isAdmin = session?.user?.id === "demo-user-id" || (session?.user as { role?: string })?.role === "admin";
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
@@ -188,18 +191,56 @@ export default function DashboardLayout({
             </div>
           </nav>
 
+          {/* Connected Platforms (Admin only) */}
+          {isAdmin && (
+            <div className="px-4 py-4 border-t border-white/10">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-3 px-2">Connected</p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+                  <span className="text-xs text-blue-400">Meta Ads</span>
+                  <span className="ml-auto text-[10px] text-blue-400/60">Live</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/20">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  <span className="text-xs text-green-400">Google Ads</span>
+                  <span className="ml-auto text-[10px] text-green-400/60">Live</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full" />
+                  <span className="text-xs text-orange-400">Revive</span>
+                  <span className="ml-auto text-[10px] text-orange-400/60">Ready</span>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* User section */}
           <div className="px-4 py-4 border-t border-white/10">
             <div className="flex items-center gap-3 mb-4 p-3 rounded-xl bg-white/5">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center relative">
                 <span className="text-sm font-bold text-white">
                   {session.user?.name?.[0] || session.user?.email?.[0] || "U"}
                 </span>
+                {isAdmin && (
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center">
+                    <svg className="w-2.5 h-2.5 text-yellow-900" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">
-                  {session.user?.name || "User"}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-white truncate">
+                    {session.user?.name || "User"}
+                  </p>
+                  {isAdmin && (
+                    <span className="text-[10px] px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded-full font-medium">
+                      Admin
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-gray-500 truncate">
                   {session.user?.email}
                 </p>

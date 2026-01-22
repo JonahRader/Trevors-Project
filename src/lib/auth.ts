@@ -19,12 +19,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const email = credentials.email as string;
         const password = credentials.password as string;
 
-        // Test user for UI demo (no database required)
+        // Test user for UI demo (no database required) - Full admin access
         if (email === "demo@test.com" && password === "demo123") {
           return {
             id: "demo-user-id",
             email: "demo@test.com",
-            name: "Demo User",
+            name: "Admin Demo",
+            role: "admin",
           };
         }
 
@@ -86,12 +87,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = (user as { role?: string }).role || "user";
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        (session.user as { role?: string }).role = token.role as string;
       }
       return session;
     },
