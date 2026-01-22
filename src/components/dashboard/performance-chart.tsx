@@ -52,26 +52,26 @@ const CustomTooltip = ({
 
 export function PerformanceChart() {
   return (
-    <div className="bg-gray-900/50 rounded-2xl border border-white/10 p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-gray-900/50 rounded-xl sm:rounded-2xl border border-white/10 p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-white">
+          <h3 className="text-base sm:text-lg font-semibold text-white">
             Performance Overview
           </h3>
-          <p className="text-sm text-gray-400">Monthly ad spend comparison</p>
+          <p className="text-xs sm:text-sm text-gray-400">Monthly ad spend comparison</p>
         </div>
-        <div className="flex gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-sm text-gray-400">Meta Ads</span>
+        <div className="flex gap-3 sm:gap-4">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-blue-500" />
+            <span className="text-xs sm:text-sm text-gray-400">Meta Ads</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-purple-500" />
-            <span className="text-sm text-gray-400">Google Ads</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-purple-500" />
+            <span className="text-xs sm:text-sm text-gray-400">Google Ads</span>
           </div>
         </div>
       </div>
-      <div className="h-80">
+      <div className="h-60 sm:h-72 md:h-80">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}

@@ -132,50 +132,50 @@ export function SummaryCards({
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 stagger-children">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 stagger-children">
       {cards.map((card, index) => (
         <div
           key={card.title}
-          className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${card.bgGradient} border border-white/10 p-6 hover-lift cursor-pointer`}
+          className={`group relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br ${card.bgGradient} border border-white/10 p-3 sm:p-4 md:p-6 hover-lift cursor-pointer`}
           style={{ animationDelay: `${index * 0.1}s` }}
         >
           {/* Background glow effect */}
           <div
-            className={`absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br ${card.gradient} rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity`}
+            className={`absolute -top-12 -right-12 w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-br ${card.gradient} rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity`}
           />
 
           <div className="relative">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2 sm:mb-4">
               <div
-                className={`w-10 h-10 rounded-xl bg-gradient-to-r ${card.gradient} flex items-center justify-center text-white`}
+                className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-r ${card.gradient} flex items-center justify-center text-white`}
               >
-                {card.icon}
+                <div className="scale-75 sm:scale-100">{card.icon}</div>
               </div>
               <div
-                className={`flex items-center gap-1 text-sm ${
+                className={`flex items-center gap-0.5 sm:gap-1 text-xs sm:text-sm ${
                   card.trendUp ? "text-green-400" : "text-red-400"
                 }`}
               >
                 {card.trendUp ? (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
                   </svg>
                 ) : (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                   </svg>
                 )}
-                {card.trend}
+                <span className="hidden sm:inline">{card.trend}</span>
               </div>
             </div>
 
-            <p className="text-sm text-gray-400 mb-1">{card.title}</p>
+            <p className="text-xs sm:text-sm text-gray-400 mb-0.5 sm:mb-1">{card.title}</p>
             <div
-              className={`text-3xl font-bold bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent`}
+              className={`text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent`}
             >
               <AnimatedNumber value={card.value} format={card.format} />
             </div>
-            <p className="text-xs text-gray-500 mt-2">{card.description}</p>
+            <p className="text-[10px] sm:text-xs text-gray-500 mt-1 sm:mt-2 hidden sm:block">{card.description}</p>
           </div>
         </div>
       ))}

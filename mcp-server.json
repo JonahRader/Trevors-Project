@@ -1,0 +1,209 @@
+{
+  "name": "lumora-ad-analytics",
+  "version": "1.0.0",
+  "description": "MCP server for Lumora Ad Analytics Dashboard - provides tools for managing ad campaigns across multiple platforms",
+  "mcpServers": {
+    "lumora": {
+      "command": "node",
+      "args": ["./mcp/server.js"],
+      "env": {
+        "LUMORA_API_URL": "http://localhost:3000/api"
+      }
+    },
+    "adcp": {
+      "comment": "Ad Context Protocol - https://adcontextprotocol.org",
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-fetch"],
+      "env": {}
+    },
+    "analytics": {
+      "comment": "Analytics MCP for Plausible/PostHog",
+      "command": "node",
+      "args": ["./mcp/analytics-server.js"]
+    }
+  },
+  "tools": [
+    {
+      "name": "lumora_get_campaigns",
+      "description": "Fetch all campaigns from connected ad platforms in the Lumora dashboard",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "Filter by platform (meta, google, revive, plausible, etc.) or 'all' for all platforms",
+            "enum": ["all", "meta", "google", "tiktok", "linkedin", "pinterest", "revive", "ethicalads", "plausible", "matomo", "posthog"]
+          },
+          "status": {
+            "type": "string",
+            "description": "Filter by campaign status",
+            "enum": ["all", "active", "paused", "completed"]
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "lumora_get_metrics",
+      "description": "Get aggregated metrics across all connected ad platforms",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "dateRange": {
+            "type": "string",
+            "description": "Date range for metrics",
+            "enum": ["today", "7d", "30d", "90d", "ytd"]
+          },
+          "groupBy": {
+            "type": "string",
+            "description": "Group metrics by dimension",
+            "enum": ["platform", "campaign", "day", "week", "month"]
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "lumora_sync_platform",
+      "description": "Trigger a data sync for a specific ad platform",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "type": "string",
+            "description": "The platform to sync data from",
+            "enum": ["meta", "google", "tiktok", "linkedin", "pinterest", "revive", "ethicalads", "plausible", "matomo", "posthog"]
+          },
+          "fullSync": {
+            "type": "boolean",
+            "description": "Whether to perform a full historical sync (default: false for incremental)",
+            "default": false
+          }
+        },
+        "required": ["platform"]
+      }
+    },
+    {
+      "name": "lumora_optimize_campaign",
+      "description": "Get AI-powered optimization recommendations for a campaign",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string",
+            "description": "The campaign ID to analyze"
+          },
+          "goal": {
+            "type": "string",
+            "description": "Optimization goal",
+            "enum": ["maximize_roas", "minimize_cpa", "increase_conversions", "reduce_spend", "improve_ctr"]
+          }
+        },
+        "required": ["campaignId", "goal"]
+      }
+    },
+    {
+      "name": "lumora_compare_platforms",
+      "description": "Compare performance metrics across multiple ad platforms",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "platforms": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "List of platforms to compare"
+          },
+          "metric": {
+            "type": "string",
+            "description": "Primary metric to compare",
+            "enum": ["spend", "roas", "conversions", "ctr", "cpc", "impressions"]
+          },
+          "dateRange": {
+            "type": "string",
+            "description": "Date range for comparison",
+            "enum": ["7d", "30d", "90d"]
+          }
+        },
+        "required": ["platforms", "metric"]
+      }
+    },
+    {
+      "name": "lumora_create_report",
+      "description": "Generate a performance report for ad campaigns",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "reportType": {
+            "type": "string",
+            "description": "Type of report to generate",
+            "enum": ["summary", "detailed", "comparison", "trend"]
+          },
+          "platforms": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Platforms to include in the report"
+          },
+          "dateRange": {
+            "type": "string",
+            "description": "Date range for the report"
+          },
+          "format": {
+            "type": "string",
+            "description": "Output format",
+            "enum": ["json", "markdown", "csv"]
+          }
+        },
+        "required": ["reportType"]
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uri": "lumora://campaigns",
+      "name": "Ad Campaigns",
+      "description": "All ad campaigns across connected platforms",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "lumora://metrics/summary",
+      "name": "Metrics Summary",
+      "description": "Aggregated metrics summary across all platforms",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "lumora://platforms",
+      "name": "Connected Platforms",
+      "description": "List of connected ad platforms and their status",
+      "mimeType": "application/json"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "analyze_campaign_performance",
+      "description": "Analyze campaign performance and provide recommendations",
+      "arguments": [
+        {
+          "name": "campaignId",
+          "description": "The campaign to analyze",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "weekly_report",
+      "description": "Generate a weekly performance report",
+      "arguments": []
+    },
+    {
+      "name": "budget_optimization",
+      "description": "Suggest budget allocation across platforms",
+      "arguments": [
+        {
+          "name": "totalBudget",
+          "description": "Total budget to allocate",
+          "required": true
+        }
+      ]
+    }
+  ]
+}
