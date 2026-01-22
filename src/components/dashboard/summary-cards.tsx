@@ -1,12 +1,45 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 
 interface SummaryCardsProps {
   totalSpend: number;
   totalConversions: number;
   averageRoas: number;
   totalImpressions: number;
+}
+
+function AnimatedNumber({
+  value,
+  format,
+}: {
+  value: number;
+  format: (n: number) => string;
+}) {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    const duration = 1500;
+    const steps = 60;
+    const stepValue = value / steps;
+    let current = 0;
+    let step = 0;
+
+    const timer = setInterval(() => {
+      step++;
+      current = Math.min(stepValue * step, value);
+      setDisplayValue(current);
+
+      if (step >= steps) {
+        clearInterval(timer);
+        setDisplayValue(value);
+      }
+    }, duration / steps);
+
+    return () => clearInterval(timer);
+  }, [value]);
+
+  return <span>{format(displayValue)}</span>;
 }
 
 function formatNumber(num: number): string {
@@ -16,7 +49,7 @@ function formatNumber(num: number): string {
   if (num >= 1000) {
     return (num / 1000).toFixed(1) + "K";
   }
-  return num.toLocaleString();
+  return Math.floor(num).toLocaleString();
 }
 
 function formatCurrency(amount: number): string {
@@ -37,46 +70,114 @@ export function SummaryCards({
   const cards = [
     {
       title: "Total Spend",
-      value: formatCurrency(totalSpend),
+      value: totalSpend,
+      format: formatCurrency,
       description: "Across all campaigns",
-      color: "text-blue-600",
+      gradient: "from-blue-500 to-cyan-500",
+      bgGradient: "from-blue-500/10 to-cyan-500/10",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+      trend: "+12.5%",
+      trendUp: true,
     },
     {
       title: "Total Conversions",
-      value: formatNumber(totalConversions),
+      value: totalConversions,
+      format: formatNumber,
       description: "All ad accounts",
-      color: "text-green-600",
+      gradient: "from-green-500 to-emerald-500",
+      bgGradient: "from-green-500/10 to-emerald-500/10",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
+      trend: "+8.2%",
+      trendUp: true,
     },
     {
       title: "Average ROAS",
-      value: `${averageRoas.toFixed(2)}x`,
+      value: averageRoas,
+      format: (n: number) => `${n.toFixed(2)}x`,
       description: "Return on ad spend",
-      color: "text-purple-600",
+      gradient: "from-purple-500 to-pink-500",
+      bgGradient: "from-purple-500/10 to-pink-500/10",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        </svg>
+      ),
+      trend: "+5.1%",
+      trendUp: true,
     },
     {
       title: "Total Impressions",
-      value: formatNumber(totalImpressions),
+      value: totalImpressions,
+      format: formatNumber,
       description: "Ad views",
-      color: "text-orange-600",
+      gradient: "from-orange-500 to-yellow-500",
+      bgGradient: "from-orange-500/10 to-yellow-500/10",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+      ),
+      trend: "-2.3%",
+      trendUp: false,
     },
   ];
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {cards.map((card) => (
-        <Card key={card.title}>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">
-              {card.title}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${card.color}`}>
-              {card.value}
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 stagger-children">
+      {cards.map((card, index) => (
+        <div
+          key={card.title}
+          className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${card.bgGradient} border border-white/10 p-6 hover-lift cursor-pointer`}
+          style={{ animationDelay: `${index * 0.1}s` }}
+        >
+          {/* Background glow effect */}
+          <div
+            className={`absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br ${card.gradient} rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity`}
+          />
+
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4">
+              <div
+                className={`w-10 h-10 rounded-xl bg-gradient-to-r ${card.gradient} flex items-center justify-center text-white`}
+              >
+                {card.icon}
+              </div>
+              <div
+                className={`flex items-center gap-1 text-sm ${
+                  card.trendUp ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {card.trendUp ? (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  </svg>
+                )}
+                {card.trend}
+              </div>
             </div>
-            <p className="text-xs text-gray-500 mt-1">{card.description}</p>
-          </CardContent>
-        </Card>
+
+            <p className="text-sm text-gray-400 mb-1">{card.title}</p>
+            <div
+              className={`text-3xl font-bold bg-gradient-to-r ${card.gradient} bg-clip-text text-transparent`}
+            >
+              <AnimatedNumber value={card.value} format={card.format} />
+            </div>
+            <p className="text-xs text-gray-500 mt-2">{card.description}</p>
+          </div>
+        </div>
       ))}
     </div>
   );
