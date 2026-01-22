@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import prisma from "./db";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -30,12 +29,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         // Real database authentication (only if database is available)
-        if (!prisma) {
+        if (!process.env.DATABASE_URL) {
           // No database configured, only demo user allowed
           return null;
         }
 
         try {
+          // Dynamic import to avoid bundling Prisma when not needed
+          const { default: prisma } = await import("./db");
+
+          if (!prisma) {
+            return null;
+          }
+
           const user = await prisma.user.findUnique({
             where: { email },
           });

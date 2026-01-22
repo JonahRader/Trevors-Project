@@ -1,23 +1,36 @@
-import { PrismaClient } from "@prisma/client";
+// Completely skip Prisma when DATABASE_URL is not set
+// This prevents any Prisma-related crashes in demo mode
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+type PrismaClientType = {
+  user: any;
+  adAccount: any;
+  campaign: any;
+  [key: string]: any;
 };
 
-// Lazy-load Prisma client only when DATABASE_URL is available
-function getPrismaClient(): PrismaClient | null {
+let prismaInstance: PrismaClientType | null = null;
+let initialized = false;
+
+function initPrisma(): PrismaClientType | null {
+  if (initialized) return prismaInstance;
+  initialized = true;
+
   if (!process.env.DATABASE_URL) {
+    console.log("No DATABASE_URL - running in demo mode without database");
     return null;
   }
 
-  if (!globalForPrisma.prisma) {
-    globalForPrisma.prisma = new PrismaClient();
+  try {
+    // Only require Prisma when we actually have a database URL
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { PrismaClient } = require("@prisma/client");
+    prismaInstance = new PrismaClient();
+    return prismaInstance;
+  } catch (error) {
+    console.error("Failed to initialize Prisma:", error);
+    return null;
   }
-
-  return globalForPrisma.prisma;
 }
 
-// Export a getter that returns null if no database
-export const prisma = getPrismaClient();
-
+export const prisma = initPrisma();
 export default prisma;

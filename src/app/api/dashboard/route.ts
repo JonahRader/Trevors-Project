@@ -165,12 +165,12 @@ export async function GET() {
     });
 
     // Calculate summary metrics
-    const totalSpend = campaigns.reduce((sum, c) => sum + c.spend, 0);
-    const totalConversions = campaigns.reduce((sum, c) => sum + c.conversions, 0);
-    const totalImpressions = campaigns.reduce((sum, c) => sum + c.impressions, 0);
+    const totalSpend = campaigns.reduce((sum: number, c: { spend: number }) => sum + c.spend, 0);
+    const totalConversions = campaigns.reduce((sum: number, c: { conversions: number }) => sum + c.conversions, 0);
+    const totalImpressions = campaigns.reduce((sum: number, c: { impressions: number }) => sum + c.impressions, 0);
     const averageRoas =
       campaigns.length > 0
-        ? campaigns.reduce((sum, c) => sum + c.roas, 0) / campaigns.length
+        ? campaigns.reduce((sum: number, c: { roas: number }) => sum + c.roas, 0) / campaigns.length
         : 0;
 
     return NextResponse.json({
