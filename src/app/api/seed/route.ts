@@ -13,6 +13,14 @@ export async function POST() {
 
     const userId = session.user.id;
 
+    // Check if database is available
+    if (!prisma) {
+      return NextResponse.json(
+        { message: "Database not configured, using demo data", seeded: false },
+        { status: 200 }
+      );
+    }
+
     // Check if user already has ad accounts
     const existingAccounts = await prisma.adAccount.findMany({
       where: { userId },

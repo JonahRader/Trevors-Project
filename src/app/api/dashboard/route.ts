@@ -139,6 +139,11 @@ export async function GET() {
 
     const userId = session.user.id;
 
+    // Check if database is available
+    if (!prisma) {
+      return NextResponse.json(demoData); // Return demo data if no DB
+    }
+
     // Fetch all campaigns for the user with their ad account info
     const campaigns = await prisma.campaign.findMany({
       where: {

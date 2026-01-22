@@ -14,6 +14,14 @@ export async function POST(request: Request) {
       );
     }
 
+    // Check if database is available
+    if (!prisma) {
+      return NextResponse.json(
+        { error: "Registration unavailable. Please use demo account: demo@test.com / demo123" },
+        { status: 503 }
+      );
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });

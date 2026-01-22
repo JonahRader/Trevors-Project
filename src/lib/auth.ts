@@ -29,7 +29,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           };
         }
 
-        // Real database authentication
+        // Real database authentication (only if database is available)
+        if (!prisma) {
+          // No database configured, only demo user allowed
+          return null;
+        }
+
         try {
           const user = await prisma.user.findUnique({
             where: { email },
